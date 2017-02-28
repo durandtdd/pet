@@ -69,7 +69,8 @@ void testPEFile3()
 
 void testPEFile4()
 {
-    ASSERT_ERROR(PEFile file("non_existing_file.dll"));
+    PEFile file("non_existing_file.dll");
+    ASSERT(!file.isValid());
 }
 
 

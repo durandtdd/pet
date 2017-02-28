@@ -22,10 +22,6 @@
     catch(const TestFailed& err)\
     {\
         std::cout << "FAIL" << std::endl << "\t" << err.what() << std::endl;\
-    }\
-    catch(const pet::Error& err)\
-    {\
-        std::cout << "FAIL" << std::endl << "\t" << err.what() << std::endl;\
     }
 
 
@@ -35,19 +31,6 @@
 #define ASSERT(stmt)\
     if(!(stmt))\
         throw TestFailed("[" + std::to_string(__LINE__) + std::string("] Assertion failed: ") + #stmt);
-
-
-/**
- * @brief Assert that statement throws an error
- */
-#define ASSERT_ERROR(stmt)\
-    try\
-    {\
-        stmt;\
-        throw TestFailed("[" + std::to_string(__LINE__) + std::string("] No error caught: ") + #stmt);\
-    }\
-    catch(const pet::Error&) {}
-
 
 
 /**

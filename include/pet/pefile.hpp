@@ -68,6 +68,12 @@ class PET_DLL PEFile
         bool isValid() const;
 
         /**
+         * @brief Get error message if isValid() return false
+         * @return Error message
+         */
+        std::string error() const;
+
+        /**
          * @brief Get file format
          * @return File format
          */
@@ -103,6 +109,9 @@ class PET_DLL PEFile
     private:
         /** Flag indicating a valid file */
         bool m_isValid;
+
+        /** Error message */
+        std::string m_error;
 
         /** Filename */
         std::string m_filename;

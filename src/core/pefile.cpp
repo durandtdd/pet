@@ -6,7 +6,7 @@
 #include "pet/streamreader.hpp"
 #include "readers.hpp"
 
-
+#include <iostream>
 PET_USE_NAMESPACE
 
 
@@ -17,14 +17,17 @@ PEFile::PEFile(const std::string& filename):
     m_reader(m_file),
     m_format(Unknown)
 {
+
+    // File
+    m_file.exceptions(std::ifstream::failbit);
+    if(!m_file)
+    {
+        m_isValid = false;
+        m_error = "File error: Can't open file";
+    }
+
     try
     {
-        // File
-        m_file.exceptions(std::ifstream::failbit);
-        if(!m_file)
-            throw Error("File error: can't open file");
-
-
         // DOS header
         uint16 magic = m_reader.read<uint16>();
         if(magic == 0x5a4d)
@@ -64,9 +67,10 @@ PEFile::PEFile(const std::string& filename):
         if(m_header.dataDirectories.importTable.virtualAddress>0)
             m_importTable = readImportTable(m_reader, m_header.sections, m_header.dataDirectories, m_format);
     }
-    catch(const std::ios::failure& err)
+    catch(const std::ios::failure&)
     {
         m_isValid = false;
+        m_error = "File error: Corrupted or unrecognized file";
     }
 }
 
@@ -74,6 +78,12 @@ PEFile::PEFile(const std::string& filename):
 bool PEFile::isValid() const
 {
     return m_isValid;
+}
+
+
+std::string PEFile::error() const
+{
+    return m_error;
 }
 
 

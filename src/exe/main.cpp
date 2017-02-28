@@ -97,32 +97,29 @@ int main(int argc, char* argv[])
             opt.imported = true;
         }
 
-        try
-        {
-            PEFile file(opt.name);
 
-            if(opt.versions)
-                printVersions(file);
+        PEFile file(opt.name);
+        if(!file.isValid())
+            std::cout << file.error() << std::endl;
 
-            if(opt.sections)
-                printSections(file);
+        if(opt.versions)
+            printVersions(file);
 
-            if(opt.dataDirectories)
-                printDataDirectories(file);
+        if(opt.sections)
+            printSections(file);
 
-            if(opt.exported)
-                printExportedFunctions(file);
+        if(opt.dataDirectories)
+            printDataDirectories(file);
 
-            if(opt.imported)
-                printImportedFunctions(file);
+        if(opt.exported)
+            printExportedFunctions(file);
 
-            if(opt.dump)
-                printDump(file);
-        }
-        catch(const Error& err)
-        {
-            std::cout << err.what() << std::endl << std::endl;
-        }
+        if(opt.imported)
+            printImportedFunctions(file);
+
+        if(opt.dump)
+            printDump(file);
+
     }
 
     return 0;
