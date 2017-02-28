@@ -147,10 +147,17 @@ ExportTable readExportTable(StreamReader& reader, const std::map<std::string, He
 {
     ExportTable exportTable;
 
-    // Move to beginning of the table
+    // Look for table in .edata if it exists, otherwise in .rdata
     uint32 rvaExportTable = dataDirectories.exportTable.virtualAddress;
-    uint32 rvaRData = sectionHeaders.at(".rdata").virtualAddress;
-    std::size_t pos = sectionHeaders.at(".rdata").pointerToRawData + (rvaExportTable-rvaRData);
+    auto section = sectionHeaders.find(".edata");
+    if(section == sectionHeaders.end())
+    {
+        section = sectionHeaders.find(".rdata");
+        if(section == sectionHeaders.end())
+            return exportTable; // No table found
+    }
+
+    std::size_t pos = section->second.pointerToRawData + (rvaExportTable - section->second.virtualAddress);
     reader.seekg(pos);
 
     // Base addresses
@@ -205,10 +212,17 @@ ImportTable readImportTable(StreamReader& reader, const std::map<std::string, He
 {
     ImportTable importTable;
 
-    // Move to beginning of the table
+    // Look for table in .idata if it exists, otherwise in .rdata
     uint32 rvaImportTable = dataDirectories.importTable.virtualAddress;
-    uint32 rvaRData = sectionHeaders.at(".idata").virtualAddress;
-    std::size_t pos = sectionHeaders.at(".idata").pointerToRawData + (rvaImportTable-rvaRData);
+    auto section = sectionHeaders.find(".idata");
+    if(section == sectionHeaders.end())
+    {
+        section = sectionHeaders.find(".rdata");
+        if(section == sectionHeaders.end())
+            return importTable; // No table found
+    }
+
+    std::size_t pos = section->second.pointerToRawData + (rvaImportTable - section->second.virtualAddress);
     reader.seekg(pos);
 
     // Base addresses
