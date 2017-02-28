@@ -34,13 +34,13 @@ export C++ classes using STL elements
 
 
 # Project structure
-'''
-pet
-  |- build         Build files directory
-  |- doc           Documentation
-  |- include       Public include
-  |- src           Source
-  |    |- core     Library sources
-  |    |- exe      Executable sources
-  |- test          Tests files
-'''
+|Folder| Description |
+| ----- | ------------ |
+|bin    | Output files |
+|build  | Build files |
+|doc    | Documentation |
+|include| Public include |
+|src    | Sources |
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;core| Library sources | 
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exe | Executable sources|
+|test   | Tests files    |
